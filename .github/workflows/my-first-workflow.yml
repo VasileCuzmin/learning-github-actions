@@ -5,6 +5,12 @@ on:
       - main
   schedule:
     - cron: '0 0 * * *' 
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'Your name'
+        required: true
+        default: 'Vasile'
 
 jobs:
   job1:
