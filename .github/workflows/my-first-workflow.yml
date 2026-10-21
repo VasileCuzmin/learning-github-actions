@@ -1,28 +1,39 @@
-
 name: my-first-workflow
 on: push
 
-jobs: 
-    job1: 
-        name: Job1
-        runs-on: ubuntu-latest 
-        steps: 
-            - name: command in job1
-              run: echo "Vasile" && ifconfig
-            - name: Who am I
-              run: whoami
-            - name: Calling sleep
-              run: sleep 20
-    job2: 
-            name: Job2
-            runs-on: ubuntu-latest 
-            steps: 
-                - name: command in job2
-                  run: hostname
-                - name: running multiple commands
-                  run: | 
-                    echo "Vasile"
-                    echo "Current time is `time`"
-                    sleep 20
-
-
+jobs:
+  job1:
+    name: Job1
+    runs-on: ubuntu-latest
+    steps:
+      - name: command in job1
+        run: echo "Vasile" && ifconfig
+      - name: Who am I
+        run: whoami
+      - name: Calling sleep
+        run: sleep 20
+  job2:
+    name: Job2
+    runs-on: ubuntu-latest
+    steps:
+      - name: command in job2
+        run: hostname
+      - name: running multiple commands
+        run: |
+          echo "Vasile"
+          echo "Current time is `time`"
+          sleep 20
+  job3:
+    name: Job3
+    needs: job1
+    runs-on: ubuntu-latest
+    steps:
+      - name: job with single dependency
+        run: SLEEP 10
+  Job4:
+    name: Job4
+    needs: [job1, job2, job3]
+    runs-on: ubuntu-latest
+    steps:
+      - name: job with multiple dependencies
+        run: sleep 10
