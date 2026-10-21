@@ -11,4 +11,18 @@ jobs:
               run: echo "Vasile" && ifconfig
             - name: Who am I
               run: whoami
+            - name: Calling sleep
+              run: sleep 20
+    job2: 
+            name: Job2
+            runs-on: ubuntu-latest 
+            steps: 
+                - name: command in job2
+                  run: hostname
+                - name: running multiple commands
+                  run: | 
+                    echo "Vasile"
+                    echo "Current time is `time`"
+                    sleep 20
+
 
