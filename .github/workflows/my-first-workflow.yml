@@ -26,14 +26,17 @@ jobs:
   job3:
     name: Job3
     needs: job1
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - name: job with single dependency
         run: SLEEP 10
+      - name: checking the OS
+        shell: pwsh 
+        run: get-computerinfo | select csname, osname, osversion
   Job4:
     name: Job4
     needs: [job1, job2, job3]
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
-      - name: job with multiple dependencies
-        run: sleep 10
+      - name: checking the OS
+        run: sw_vers
