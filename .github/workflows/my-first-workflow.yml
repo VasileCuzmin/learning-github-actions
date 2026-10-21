@@ -1,1 +1,14 @@
 
+name: my-first-workflow
+on: push
+
+jobs: 
+    job1: 
+        name: Job1
+        runs-on: ubuntu-latest 
+        steps: 
+            - name: command in job1
+              run: echo "Vasile" && ifconfig
+            - name: Who am I
+              run: whoami
+
