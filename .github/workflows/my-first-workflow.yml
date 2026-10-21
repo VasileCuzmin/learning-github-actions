@@ -1,5 +1,10 @@
 name: my-first-workflow
-on: push
+on: 
+  push:
+    branches:
+      - main
+  schedule:
+    - cron: '0 0 * * *' 
 
 jobs:
   job1:
@@ -29,9 +34,9 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: job with single dependency
-        run: SLEEP 10
+        run: sleep 10
       - name: checking the OS
-        shell: pwsh 
+        shell: pwsh
         run: get-computerinfo | select csname, osname, osversion
   Job4:
     name: Job4
