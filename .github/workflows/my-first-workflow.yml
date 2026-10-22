@@ -54,3 +54,19 @@ jobs:
           name: myartifact
       - name: checking current directory post download
         run: pwd && ls -ltr
+  job3:
+      name: Job3
+      needs: job1
+      runs-on: ubuntu-latest
+      steps:
+        - name: creating custom folder for download
+          run: mkdir -p ./custom-folder
+        - name: checking current directory
+          run: pwd && ls -ltr
+        - name: Download artifacts from job1 inside custom folder
+          uses: actions/download-artifact@v8
+          with:
+            name: myartifact
+            path: ./custom-folder 
+        - name: checking current directory post download
+          run: pwd && ls -ltr
