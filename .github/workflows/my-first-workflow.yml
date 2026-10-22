@@ -5,6 +5,7 @@ on:
       - dev
       - 'feature/*'
       - main
+      - 'feature-*'
 jobs:
   job1:
     name: Job1
