@@ -69,4 +69,4 @@ jobs:
             name: myartifact
             path: ./custom-folder 
         - name: checking current directory post download
-          run: pwd && ls -ltr
+          run: pwd && ls -ltr ./custom-folder
