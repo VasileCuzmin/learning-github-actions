@@ -41,3 +41,15 @@ jobs:
             ./myartifact.txt 
             ./artifacts/*
             !**/hostname.txt 
+  job2:
+    name: Job2
+    runs-on: ubuntu-latest
+    steps:
+      - name: checking current directory
+        run: pwd && ls -ltr
+      - name: Download artifacts from job1
+        uses: actions/download-artifact@v8
+        with:
+          name: myartifact
+      - name: checking current directory post download
+        run: pwd && ls -ltr
