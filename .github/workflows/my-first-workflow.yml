@@ -3,7 +3,7 @@ on:
   push:
     branches:
       - dev
-      - 'feauture/*'
+      - 'feature/*'
       - main
 jobs:
   job1:
