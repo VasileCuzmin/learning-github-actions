@@ -3,51 +3,16 @@ on:
   push:
     branches:
       - main
-  schedule:
-    - cron: '0 0 * * *' 
-  workflow_dispatch:
-    inputs:
-      name:
-        description: 'Your name'
-        required: true
-        default: 'Vasile'
-
 jobs:
   job1:
     name: Job1
     runs-on: ubuntu-latest
     steps:
-      - name: command in job1
-        run: echo "Vasile" && ifconfig
-      - name: Who am I
-        run: whoami
-      - name: Calling sleep
-        run: sleep 20
-  job2:
-    name: Job2
-    runs-on: ubuntu-latest
-    steps:
-      - name: command in job2
-        run: hostname
-      - name: running multiple commands
+      - name: Step 1
+        run: | 
+         pwd
+         ls -ltr
+         hostname
+      - name: checkout
         run: |
-          echo "Vasile"
-          echo "Current time is `time`"
-          sleep 20
-  job3:
-    name: Job3
-    needs: job1
-    runs-on: windows-latest
-    steps:
-      - name: job with single dependency
-        run: sleep 10
-      - name: checking the OS
-        shell: pwsh
-        run: get-computerinfo | select csname, osname, osversion
-  Job4:
-    name: Job4
-    needs: [job1, job2, job3]
-    runs-on: macos-latest
-    steps:
-      - name: checking the OS
-        run: sw_vers
+          echo "Hello World"
