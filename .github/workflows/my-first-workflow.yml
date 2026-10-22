@@ -2,6 +2,8 @@ name: my-first-workflow
 on: 
   push:
     branches:
+      - dev
+      - 'feauture/*'
       - main
 jobs:
   job1:
