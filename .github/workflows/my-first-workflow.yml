@@ -1,21 +1,25 @@
 name: my-first-workflow
-on: 
+on:
   push:
     branches:
       - dev
-      - 'feature/*'
+      - "feature/*"
       - main
-      - 'feature-*'
+      - "feature-*"
+  pull_request:
+    branches:
+      - main
+
 jobs:
   job1:
     name: Job1
     runs-on: ubuntu-latest
     steps:
       - name: Step 1
-        run: | 
-         pwd
-         ls -ltr
-         hostname
+        run: |
+          pwd
+          ls -ltr
+          hostname
       - name: checkout
         uses: actions/checkout@v6.1.0
       - name: Step 2
@@ -43,7 +47,7 @@ jobs:
           path: |
             ./myartifact.txt 
             ./artifacts/*
-            !**/hostname.txt 
+            !**/hostname.txt
   job2:
     name: Job2
     needs: job1
@@ -58,18 +62,18 @@ jobs:
       - name: checking current directory post download
         run: pwd && ls -ltr
   job3:
-      name: Job3
-      needs: job1
-      runs-on: ubuntu-latest
-      steps:
-        - name: creating custom folder for download
-          run: mkdir -p ./custom-folder
-        - name: checking current directory
-          run: pwd && ls -ltr
-        - name: Download artifacts from job1 inside custom folder
-          uses: actions/download-artifact@v8
-          with:
-            name: myartifact
-            path: ./custom-folder 
-        - name: checking current directory post download
-          run: pwd && ls -ltr ./custom-folder
+    name: Job3
+    needs: job1
+    runs-on: ubuntu-latest
+    steps:
+      - name: creating custom folder for download
+        run: mkdir -p ./custom-folder
+      - name: checking current directory
+        run: pwd && ls -ltr
+      - name: Download artifacts from job1 inside custom folder
+        uses: actions/download-artifact@v8
+        with:
+          name: myartifact
+          path: ./custom-folder
+      - name: checking current directory post download
+        run: pwd && ls -ltr ./custom-folder
