@@ -105,7 +105,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: stg
-    if: github.head_ref == 'refs/heads/dev'
+    if: github.head_ref == 'dev'
     steps:
       - name: referring env vars and secrets
         run: |
