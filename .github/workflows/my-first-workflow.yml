@@ -105,6 +105,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: stg
+    if: github.ref == 'refs/heads/dev'
     steps:
       - name: referring env vars and secrets
         run: |
@@ -114,6 +115,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: prod
+    if: github.ref == 'refs/heads/main'
     steps:
       - name: referring env vars and secrets
         run: |
