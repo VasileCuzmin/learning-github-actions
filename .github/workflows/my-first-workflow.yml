@@ -54,6 +54,9 @@ jobs:
           echo $ENV_TYPE
           echo $APP_USER
           echo $APP_PORT
+      - name: repository secrets
+        run: |
+          echo ${{ secrets.APP_PASS }}
   job2:
     name: Job2
     needs: job1
