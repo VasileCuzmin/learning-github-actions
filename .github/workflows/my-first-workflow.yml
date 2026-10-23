@@ -88,7 +88,7 @@ jobs:
           path: ./custom-folder
       - name: checking current directory post download
         run: pwd && ls -ltr ./custom-folder
-    job4:
+  job4:
       name: Job4
       runs-on: ubuntu-latest
       steps:
