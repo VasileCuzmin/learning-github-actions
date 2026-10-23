@@ -88,3 +88,14 @@ jobs:
           path: ./custom-folder
       - name: checking current directory post download
         run: pwd && ls -ltr ./custom-folder
+    job4:
+      name: Job4
+      runs-on: ubuntu-latest
+      steps:
+        - name: referring context or built-in env vars
+          run: |
+            echo "triggerd by event: ${{ github.event_name }}"
+            echo "triggerd by workflow: ${{ github.workflow }}"
+            echo "triggerd by action: ${{ github.action }}"
+            echo "new changes pushed to branch: ${{ github.ref }}"
+            echo "changes added by user: ${{ github.actor }} in ${{ github.ref_name }} branch"
