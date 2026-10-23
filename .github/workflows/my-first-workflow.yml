@@ -6,6 +6,10 @@ on:
   pull_request:
     branches:
       - main
+env:
+  ENV_TYPE: dev
+  APP_USER: cuzminv
+  APP_PORT: 8080
 
 jobs:
   job1:
@@ -45,6 +49,11 @@ jobs:
             ./myartifact.txt 
             ./artifacts/*
             !**/hostname.txt
+      - name: referring env vars
+        run: |
+          echo $ENV_TYPE
+          echo $APP_USER
+          echo $APP_PORT
   job2:
     name: Job2
     needs: job1
