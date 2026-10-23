@@ -98,7 +98,7 @@ jobs:
           echo "triggerd by workflow: ${{ github.workflow }}"
           echo "triggerd by action: ${{ github.action }}"
           echo "new changes pushed to branch: ${{ github.ref }}"
-          echo "changes added by user: ${{ github.actor }} in ${{ github.ref_name }} branch"
+          echo "changes added by user: ${{ github.actor }} in ${{ github.head_ref }} branch"
 
   staging:
     name: Staging
