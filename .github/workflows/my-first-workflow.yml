@@ -2,10 +2,7 @@ name: my-first-workflow
 on:
   push:
     branches:
-      - dev
-      - "feature/*"
       - main
-      - "feature-*"
   pull_request:
     branches:
       - main
@@ -61,8 +58,8 @@ jobs:
           name: myartifact
       - name: checking current directory post download
         run: pwd && ls -ltr
-      - name: Fail
-        run: exit 1
+      - name: Successful completion of job2
+        run: exit 0
   job3:
     name: Job3
     needs: job1
