@@ -6,6 +6,10 @@ on:
   pull_request:
     branches:
       - main
+env:
+  ENV_TYPE: dev
+  APP_USER: cuzminv
+  APP_PORT: 8080
 
 jobs:
   job1:
@@ -45,6 +49,14 @@ jobs:
             ./myartifact.txt 
             ./artifacts/*
             !**/hostname.txt
+      - name: referring env vars
+        run: |
+          echo $ENV_TYPE
+          echo $APP_USER
+          echo $APP_PORT
+      - name: repository secrets
+        run: |
+          echo ${{ secrets.APP_PASS }}
   job2:
     name: Job2
     needs: job1
@@ -76,3 +88,35 @@ jobs:
           path: ./custom-folder
       - name: checking current directory post download
         run: pwd && ls -ltr ./custom-folder
+  job4:
+    name: Job4
+    runs-on: ubuntu-latest
+    steps:
+      - name: referring context or built-in env vars
+        run: |
+          echo "triggerd by event: ${{ github.event_name }}"
+          echo "triggerd by workflow: ${{ github.workflow }}"
+          echo "triggerd by action: ${{ github.action }}"
+          echo "new changes pushed to branch: ${{ github.ref }}"
+          echo "changes added by user: ${{ github.actor }} in ${{ github.head_ref }} branch"
+
+  staging:
+    name: Staging
+    runs-on: ubuntu-latest
+    environment:
+      name: stg
+    if: github.head_ref == 'dev'
+    steps:
+      - name: referring env vars and secrets
+        run: |
+          echo "running deployment on $ {{ vars.HOST }} using user $ {{ secrets.USER }}"
+  production:
+    name: Production
+    runs-on: ubuntu-latest
+    environment:
+      name: prod
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: referring env vars and secrets
+        run: |
+          echo "running deployment on $ {{ vars.HOST }} using user $ {{ secrets.USER }}"
