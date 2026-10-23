@@ -89,13 +89,32 @@ jobs:
       - name: checking current directory post download
         run: pwd && ls -ltr ./custom-folder
   job4:
-      name: Job4
-      runs-on: ubuntu-latest
-      steps:
-        - name: referring context or built-in env vars
-          run: |
-            echo "triggerd by event: ${{ github.event_name }}"
-            echo "triggerd by workflow: ${{ github.workflow }}"
-            echo "triggerd by action: ${{ github.action }}"
-            echo "new changes pushed to branch: ${{ github.ref }}"
-            echo "changes added by user: ${{ github.actor }} in ${{ github.ref_name }} branch"
+    name: Job4
+    runs-on: ubuntu-latest
+    steps:
+      - name: referring context or built-in env vars
+        run: |
+          echo "triggerd by event: ${{ github.event_name }}"
+          echo "triggerd by workflow: ${{ github.workflow }}"
+          echo "triggerd by action: ${{ github.action }}"
+          echo "new changes pushed to branch: ${{ github.ref }}"
+          echo "changes added by user: ${{ github.actor }} in ${{ github.ref_name }} branch"
+
+  staging:
+    name: Staging
+    runs-on: ubuntu-latest
+    environment:
+      name: stg
+    steps:
+      - name: referring env vars and secrets
+        run: |
+          echo "running deployment on $ {{ vars.HOST }} using user $ {{ secrets.USER }}"
+  production:
+    name: Production
+    runs-on: ubuntu-latest
+    environment:
+      name: prod
+    steps:
+      - name: referring env vars and secrets
+        run: |
+          echo "running deployment on $ {{ vars.HOST }} using user $ {{ secrets.USER }}"
