@@ -191,6 +191,6 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       - name: SonaQube Quality Gate Check
-        uses: SonarSource/sonarqube-quality-gate-action@f0e7c1d8a9b3f5e2c6b4e5c6d5e5f5e5f5e5f5e5 # v1.0.0
+        uses: SonarSource/sonarqube-quality-gate-action@v1.1.0
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
