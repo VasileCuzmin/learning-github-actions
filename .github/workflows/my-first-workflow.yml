@@ -173,8 +173,7 @@ jobs:
         uses: github/codeql-action/analyze@v3
         with:
           category: "/language:${{ matrix.language }}-security"
-  
- sonarqube:
+  sonarqube:
     name: SonarQube
     runs-on: ubuntu-latest
     steps:
