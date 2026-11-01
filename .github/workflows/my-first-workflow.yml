@@ -143,3 +143,32 @@ jobs:
       - name: referring env vars and secrets
         run: |
           echo "running deployment on $ {{ vars.HOST }} using user $ {{ secrets.USER }}"
+  
+  codeql:
+    - name: CodeQL Analysis
+      runs-on: ubuntu-latest
+      permissions:
+        actions: read  #lets the job read information about Actions itself, such as workflow runs and the workflow files. The comment in your snippet is a bit misleading, because the token doesn’t just open files. CodeQL’s action uses this permission to look up details about the current workflow run through the API, and it’s needed in private repos. It also lets CodeQL analyze the workflow files themselves, since it can scan GitHub Actions workflows for security issues.
+        contents: read #lets the job check out your repository code.
+        security-events: write #lets the job upload scan results to the repository’s Security tab (code scanning alerts).
+         #Required for uploading SARIF file. What is the SARIF file?
+        # SARIF is a standard format for the output of static analysis tools. It allows the results of different tools to be aggregated and viewed in a consistent way.
+      strategy:
+        matrix: #Required for CodeQL analysis. 
+                #The matrix defines the different configurations that the job will run. 
+                #In this case, the matrix is defined with a single language, Python.
+          language: [ 'python' ]
+        #A strategy matrix allows you to define multiple configurations for a job, and GitHub Actions will run the job for each configuration. In this case, the matrix is defined with a single language
+        steps: 
+          - name: Checkout repository
+            uses: actions/checkout@v6.1.0
+          - name: Initialize CodeQL
+            uses: github/codeql-action/init@v3
+            with:
+              languages: ${{ matrix.language }}
+          - name: Autobuild
+            uses: github/codeql-action/autobuild@v3
+          - name: Perform CodeQL Analysis
+            uses: github/codeql-action/analyze@v3
+            with:
+              category: "/language:${{ matrix.language }}-security"
