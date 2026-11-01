@@ -225,12 +225,13 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_REGISTRY }}/my-first-python-app:${{ env.IMAGE_TAGS }}
+          tags: ${{ secrets.DOCKER_REGISTRY }}/my-first-python-app:${{ steps.vars.outputs.IMAGE_TAGS }}
+          load: true
       - name: Save Docker Image
         run: |
-          docker save ${{ secrets.DOCKER_REGISTRY }}/my-first-python-app:${{ env.IMAGE_TAGS }} -o my-first-python-app-${{ env.IMAGE_TAGS }}.tar
+          docker save ${{ secrets.DOCKER_REGISTRY }}/my-first-python-app:${{ steps.vars.outputs.IMAGE_TAGS  }} -o my-first-python-app.tar
       - name: Upload Docker Image
         uses: actions/upload-artifact@v4.4.3
         with:
           name: python-app-docker-image
-          path: my-first-python-app-${{ env.IMAGE_TAGS }}.tar
+          path: my-first-python-app.tar
