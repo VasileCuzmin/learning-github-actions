@@ -116,7 +116,7 @@ jobs:
       - name: Run unit tests
         run: |
           mkdir reports/
-          pytest --junitxml=reports/unit-test-results.xml --cov=. --cov-report=xml --cov-report=term-missing -v
+          pytest --junitxml=reports/unit-test-results.xml --cov=. --cov-report=xml:reports/coverage.xml --cov-report=term-missing -v
       - name: Upload test results
         uses: actions/upload-artifact@v4.4.3
         with:
@@ -175,11 +175,17 @@ jobs:
           category: "/language:${{ matrix.language }}-security"
   sonarqube:
     name: SonarQube
+    needs: unit-tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: Download coverage report
+        uses: actions/download-artifact@v8
+        with:
+          name: unit-test-results
+          path: reports/
       - name: Cache SonarQube packages
         uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
