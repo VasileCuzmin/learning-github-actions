@@ -99,6 +99,23 @@ jobs:
           echo "triggerd by action: ${{ github.action }}"
           echo "new changes pushed to branch: ${{ github.ref }}"
           echo "changes added by user: ${{ github.actor }} in ${{ github.head_ref }} branch"
+  unit-tests:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6.1.0
+      - name: Setup Python
+        uses: actions/setup-python@v7.1.0
+        with:
+          python-version: "3.9"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Run unit tests
+        run: |
+          pytest -v
 
   staging:
     name: Staging
