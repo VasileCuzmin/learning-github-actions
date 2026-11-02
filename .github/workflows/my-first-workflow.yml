@@ -243,6 +243,11 @@ jobs:
     permissions:
       contents: read # lets the job check out your repository code.
       packages: write # lets the job publish packages to GitHub Packages (GHCR).
+      #what does env does? 
+      #The `env` keyword in a GitHub Actions workflow is used to define environment variables that can be accessed by all steps within a job. In this case, the `IMAGE` environment variable is being set to the value of the Docker image tag generated in the `build` job. This allows subsequent steps in the `publish-ghcr` job to reference the Docker image tag easily without having to repeat the logic for generating it.
+    if: success()
+    env:
+      IMAGE: ghcr.io/vasilecuzmin/my-first-python-app:${{ needs.build.outputs.IMAGE_TAGS }}
     steps:
       - name: Download Docker Image artifact from build job
         uses: actions/download-artifact@v8
@@ -259,15 +264,9 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }} #GITHUB_TOKEN is a default secret provided by GitHub.
           # It is automatically generated for each workflow run and has read and write permissions to the repository where the workflow is running. It can be used to authenticate with the GitHub API and perform actions such as creating issues, commenting on pull requests, and pushing code to the repository.
-      - name:
-          Tag image for GHCR
-          # Tagging the Docker image with the GitHub Container Registry (GHCR) format, which includes the repository owner and the image name, along with the generated image tag.
-        run: |
-          IMAGE_TAG=${{ needs.build.outputs.IMAGE_TAGS }}
-          docker image tag my-first-python-app:$IMAGE_TAG ghcr.io/vasilecuzmin/my-first-python-app:$IMAGE_TAG
       - name: Push image to GHCR
         run: |
-          docker push ghcr.io/vasilecuzmin/my-first-python-app:$IMAGE_TAG
+          docker push ""${{ env.IMAGE }}
 
     # publish-dockerhub:
     #   name: Publish Docker Image to DockerHub
