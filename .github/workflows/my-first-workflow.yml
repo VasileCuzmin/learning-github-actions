@@ -219,19 +219,76 @@ jobs:
         run: |
           IMAGE_TAGS="${{ github.run_id }}-${{ github.run_number }}-${{ github.sha }}"
           echo "IMAGE_TAGS=$IMAGE_TAGS" >> $GITHUB_OUTPUT
-      - name: Build and push Docker image
+      - name: Build and upload Docker image
         uses: docker/build-push-action@v3.0.0
         with:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_REGISTRY }}/my-first-python-app:${{ steps.vars.outputs.IMAGE_TAGS }}
+          tags: my-first-python-app:${{ steps.generate_tags.outputs.IMAGE_TAGS }}
           load: true
       - name: Save Docker Image
         run: |
-          docker save ${{ secrets.DOCKER_REGISTRY }}/my-first-python-app:${{ steps.vars.outputs.IMAGE_TAGS  }} -o my-first-python-app.tar
+          docker save my-first-python-app:${{ steps.generate_tags.outputs.IMAGE_TAGS  }} -o my-first-python-app.tar
       - name: Upload Docker Image
         uses: actions/upload-artifact@v4.4.3
         with:
           name: python-app-docker-image
           path: my-first-python-app.tar
+
+    # publish-dockerhub:
+    #   name: Publish Docker Image to DockerHub
+    #   runs-on: ubuntu-latest
+    #   needs: build
+    #   if: success()
+    #   steps:
+    #     - name: Download Docker Image artifact from build job
+    #       uses: actions/download-artifact@v8
+    #       with:
+    #         name: python-app-docker-image
+    #         path: .
+    #     - name: Load Docker Image
+    #       run: |
+    #         docker load -i my-first-python-app.tar
+    #     - name: Login to DockerHub
+    #       uses: docker/login-action@v3.0.0
+    #       with:
+    #         username: ${{ secrets.DOCKERHUB_USERNAME }}
+    #         password: ${{ secrets.DOCKERHUB_TOKEN }}
+    #     - name: Tag image for DockerHub
+    #       run: |
+    #         docker tag ${{ secrets.DOCKER_REGISTRY }}/my-first-python-app:${{ needs.build.outputs.IMAGE_TAGS }} ${{ secrets.DOCKERHUB_USERNAME }}/my-first-python-app:${{ needs.build.outputs.IMAGE_TAGS }}
+    #     - name: Push image to DockerHub
+    #       run: |
+    #        docker push ${{ secrets.DOCKERHUB_USERNAME }}/my-first-python-app:${{ needs.build.outputs.IMAGE_TAGS }}
+
+    # publish-ghcr:
+    #   name: Publish Docker Image to GitHub Container Registry
+    #   runs-on: ubuntu-latest
+    #   needs: build
+    #   if: success()
+    #   steps:
+    #     - name: Download Docker Image artifact from build job
+    #       uses: actions/download-artifact@v8
+    #       with:
+    #         name: python-app-docker-image
+    #         path: .
+    #     - name: Load Docker Image
+    #       run: |
+    #         docker load -i my-first-python-app.tar
+    #     - name: Login to GHCR
+    #       uses: docker/login-action@v3.0.0
+    #       with:
+    #         registry: ghcr.io
+    #         username: ${{ github.actor }}
+    #         password: ${{ secrets.GITHUB_TOKEN }} #GITHUB_TOKEN is a default secret provided by GitHub.
+    #         # It is automatically generated for each workflow run and has read and write permissions to the repository where the workflow is running. It can be used to authenticate with the GitHub API and perform actions such as creating issues, commenting on pull requests, and pushing code to the repository.
+    #     - name:
+    #         Tag image for GHCR
+    #         # Tagging the Docker image with the GitHub Container Registry (GHCR) format, which includes the repository owner and the image name, along with the generated image tag.
+    #       run: |
+    #         IMAGE_TAG=${{ needs.build.outputs.IMAGE_TAGS }}
+    #         docker image tag my-first-python-app:$IMAGE_TAG ghcr.io/${{ github.repository_owner }}/my-first-python-app:$IMAGE_TAG
+    #     - name: Push image to GHCR
+    #       run: |
+    #         docker push ghcr.io/${{ github.repository_owner }}/my-first-python-app:$IMAGE_TAG
