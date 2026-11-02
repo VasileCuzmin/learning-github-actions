@@ -264,10 +264,10 @@ jobs:
           # Tagging the Docker image with the GitHub Container Registry (GHCR) format, which includes the repository owner and the image name, along with the generated image tag.
         run: |
           IMAGE_TAG=${{ needs.build.outputs.IMAGE_TAGS }}
-          docker image tag my-first-python-app:$IMAGE_TAG ghcr.io/${{ github.repository_owner }}/my-first-python-app:$IMAGE_TAG
+          docker image tag my-first-python-app:$IMAGE_TAG ghcr.io/vasilecuzmin/my-first-python-app:$IMAGE_TAG
       - name: Push image to GHCR
         run: |
-          docker push ghcr.io/${{ github.repository_owner }}/my-first-python-app:$IMAGE_TAG
+          docker push ghcr.io/vasilecuzmin/my-first-python-app:$IMAGE_TAG
 
     # publish-dockerhub:
     #   name: Publish Docker Image to DockerHub
