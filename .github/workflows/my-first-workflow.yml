@@ -18,6 +18,6 @@ jobs:
     uses: VasileCuzmin/reusable-workflows/.github/workflows/ci-pipeline.yaml@main
     with:
       run_sonarqube: true
-      run_codeql_: true
+      run_codeql: true
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
