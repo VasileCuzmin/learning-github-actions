@@ -6,12 +6,9 @@ on:
   pull_request:
     branches:
       - main
-env:
-  ENV_TYPE: dev
-  APP_USER: cuzminv
-  APP_PORT: 8080
 
 jobs:
-  uses: VasileCuzmin/reusable-workflows/.github/workflows/ci-pipeline.yaml@main
-  secrets:
-    SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  ci-pipeline-job:
+    uses: VasileCuzmin/reusable-workflows/.github/workflows/ci-pipeline.yaml@main
+    secrets:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
