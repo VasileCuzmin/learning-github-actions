@@ -5,7 +5,7 @@ on:
             - dev
 jobs:
     demo-1:
-        runs-on: self-hosted
+        runs-on: [self-hosted, python, X64] #pick a label that matches your self-hosted runner with labels "python" and "X64"
         steps:
             - name: Display system information
               run: |
