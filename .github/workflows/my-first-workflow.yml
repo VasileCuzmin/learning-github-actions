@@ -24,7 +24,7 @@ jobs:
   
   demo-1:
     name: Demo job 1
-    runs-on: arc-demo
+    runs-on: [self-hosted, arc-demo]
     steps:
       - name: Display system information
         run: |
@@ -34,7 +34,7 @@ jobs:
           echo "Runner OS: $RUNNER_OS"
   demo-2:
     name: Demo job 2
-    runs-on: [arc-demo, python, X64] #pick a label that matches your self-hosted runner with labels "python" and "X64"
+    runs-on: [self-hosted, arc-demo, X64] #pick a label that matches your self-hosted runner with labels "arc-demo" and "X64"
     steps:
       - name: Display system information
         run: |
