@@ -1,0 +1,15 @@
+name: self-hosted-runner-demo
+on:
+    push:
+        branches:
+            - dev
+jobs:
+    demo-1:
+        runs-on: [self-hosted, python, X64] #pick a label that matches your self-hosted runner with labels "python" and "X64"
+        steps:
+            - name: Display system information
+              run: |
+                  echo "Operating System: $(uname -s)"
+                  echo "Kernel Version: $(uname -r)"
+                  echo "Runner name: $RUNNER_NAME"
+                  echo "Runner OS: $RUNNER_OS"

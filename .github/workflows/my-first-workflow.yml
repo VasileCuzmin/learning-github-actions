@@ -6,117 +6,39 @@ on:
   pull_request:
     branches:
       - main
-env:
-  ENV_TYPE: dev
-  APP_USER: cuzminv
-  APP_PORT: 8080
+
+permissions:  #Required for code scanning and secret scanning to work
+  actions: read
+  security-events: write
+  packages: write
+  contents: read
 
 jobs:
-  job1:
-    name: Job1
-    runs-on: ubuntu-latest
+  ci-pipeline-job:
+    uses: VasileCuzmin/reusable-workflows/.github/workflows/ci-pipeline.yaml@main
+    with:
+      run_sonarqube: true
+      run_codeql: true
+    secrets:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  
+  demo-1:
+    name: Demo job 1
+    runs-on: [self-hosted, arc-demo]
     steps:
-      - name: Step 1
+      - name: Display system information
         run: |
-          pwd
-          ls -ltr
-          hostname
-      - name: checkout
-        uses: actions/checkout@v6.1.0
-      - name: Step 2
-        run: |
-          echo `pwd` >> myartifact.txt
-          mkdir artifacts
-          echo `ls -ltr` >> ./artifacts/list.txt
-          echo `hostname` >> ./artifacts/hostname.txt
-      - name: Upload artifacts folder
-        uses: actions/upload-artifact@v4.4.3
-        with:
-          name: myartifact
-          path: ./artifacts/*
-      - name: upload from multiple paths
-        uses: actions/upload-artifact@v4.4.3
-        with:
-          name: multiple-paths
-          path: |
-            ./myartifact.txt 
-            ./artifacts/*
-      - name: upload from multiple paths with exclusions
-        uses: actions/upload-artifact@v4.4.3
-        with:
-          name: multiple-paths-with-exclusions
-          path: |
-            ./myartifact.txt 
-            ./artifacts/*
-            !**/hostname.txt
-      - name: referring env vars
-        run: |
-          echo $ENV_TYPE
-          echo $APP_USER
-          echo $APP_PORT
-      - name: repository secrets
-        run: |
-          echo ${{ secrets.APP_PASS }}
-  job2:
-    name: Job2
-    needs: job1
-    runs-on: ubuntu-latest
+          echo "Operating System: $(uname -s)"
+          echo "Kernel Version: $(uname -r)"
+          echo "Runner name: $RUNNER_NAME"
+          echo "Runner OS: $RUNNER_OS"
+  demo-2:
+    name: Demo job 2
+    runs-on: [self-hosted, arc-demo, X64] #pick a label that matches your self-hosted runner with labels "arc-demo" and "X64"
     steps:
-      - name: checking current directory
-        run: pwd && ls -ltr
-      - name: Download artifacts from job1
-        uses: actions/download-artifact@v8
-        with:
-          name: myartifact
-      - name: checking current directory post download
-        run: pwd && ls -ltr
-      - name: Successful completion of job2
-        run: exit 0
-  job3:
-    name: Job3
-    needs: job1
-    runs-on: ubuntu-latest
-    steps:
-      - name: creating custom folder for download
-        run: mkdir -p ./custom-folder
-      - name: checking current directory
-        run: pwd && ls -ltr
-      - name: Download artifacts from job1 inside custom folder
-        uses: actions/download-artifact@v8
-        with:
-          name: myartifact
-          path: ./custom-folder
-      - name: checking current directory post download
-        run: pwd && ls -ltr ./custom-folder
-  job4:
-    name: Job4
-    runs-on: ubuntu-latest
-    steps:
-      - name: referring context or built-in env vars
+      - name: Display system information
         run: |
-          echo "triggerd by event: ${{ github.event_name }}"
-          echo "triggerd by workflow: ${{ github.workflow }}"
-          echo "triggerd by action: ${{ github.action }}"
-          echo "new changes pushed to branch: ${{ github.ref }}"
-          echo "changes added by user: ${{ github.actor }} in ${{ github.head_ref }} branch"
-
-  staging:
-    name: Staging
-    runs-on: ubuntu-latest
-    environment:
-      name: stg
-    if: github.head_ref == 'dev'
-    steps:
-      - name: referring env vars and secrets
-        run: |
-          echo "running deployment on $ {{ vars.HOST }} using user $ {{ secrets.USER }}"
-  production:
-    name: Production
-    runs-on: ubuntu-latest
-    environment:
-      name: prod
-    if: github.ref == 'refs/heads/main'
-    steps:
-      - name: referring env vars and secrets
-        run: |
-          echo "running deployment on $ {{ vars.HOST }} using user $ {{ secrets.USER }}"
+          echo "Operating System: $(uname -s)"
+          echo "Kernel Version: $(uname -r)"
+          echo "Runner name: $RUNNER_NAME"
+          echo "Runner OS: $RUNNER_OS"
