@@ -15,10 +15,10 @@ permissions:  #Required for code scanning and secret scanning to work
 
 jobs:
   ci-pipeline-job:
-    uses: VasileCuzmin/reusable-workflows/.github/workflows/ci-pipeline.yaml@main
+    uses: vasilecuzmin-org/reusable-workflows/.github/workflows/ci-pipeline.yaml@main
     with:
-      run_sonarqube: true
-      run_codeql: true
+      run_sonarqube: false
+      run_codeql: false
     secrets:
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   

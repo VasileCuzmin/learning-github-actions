@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: app-py-deployment
+  labels:
+    app: app-py
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-py
+  template:
+    metadata:
+      labels:
+        app: app-py
+    spec:
+      containers:
+        - name: app-py
+          image: ghcr.io/vasilecuzmin/my-first-python-app:41708965949-78-c02e191b24732b0d6eb49cf499845c071e705dc2
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
